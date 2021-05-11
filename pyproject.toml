@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "tunnel-tracker"
+name = "nautobot-tunnel-tracker"
 version = "0.1.0"
-description = "Nautobot Tunnel Tracker"
+description = "A plugin for tracking tunnels in Nautobot"
 authors = ["Justin Drew <jdrew82@users.noreply.github.com>"]
 
 license = "Apache-2.0"
@@ -11,9 +11,7 @@ homepage = "https://github.com/jdrew82/nautobot-plugin-tunnel-tracker"
 repository = "https://github.com/jdrew82/nautobot-plugin-tunnel-tracker"
 keywords = ["nautobot", "nautobot-plugin"]
 include = [
-
     "LICENSE",
-
     "README.md",
 ]
 packages = [
