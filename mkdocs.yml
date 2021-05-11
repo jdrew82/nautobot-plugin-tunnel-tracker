@@ -1,0 +1,25 @@
+---
+dev_addr: "127.0.0.1:8001"
+edit_uri: "edit/main/nautobot-plugin-tunnel-tracker/docs"
+site_name: "TunnelTracker Documentation"
+site_url: "https://nautobot-plugin-tunnel-tracker.readthedocs.io/"
+repo_url: "https://github.com/jdrew82/nautobot-plugin-tunnel-tracker"
+python:
+  install:
+    - requirements: "docs/requirements.txt"
+theme:
+  name: "readthedocs"
+  navigation_depth: 4
+  hljs_languages:
+    - "django"
+    - "yaml"
+extra_css:
+  - "extra.css"
+markdown_extensions:
+  - "admonition"
+  - markdown_include.include:
+      headingOffset: 1
+  - toc:
+      permalink: true
+nav:
+  - Introduction: "index.md"
