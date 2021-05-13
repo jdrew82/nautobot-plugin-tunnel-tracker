@@ -16,7 +16,6 @@ BLANK_CHOICE = (("", "---------"),)
 class TunnelCreationForm(utilities_forms.BootstrapMixin, forms.ModelForm):
     """Form for creating a new tunnel."""
 
-    q = forms.CharField(required=False, label="Search")
     name = forms.CharField(required=True, label="Name", help_text="Name of tunnel")
 
     status = forms.ChoiceField(choices=BLANK_CHOICE + TunnelStatusChoices.CHOICES, required=False)
