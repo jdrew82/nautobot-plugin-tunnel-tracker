@@ -2,18 +2,29 @@
 
 from django.db import models
 from django.shortcuts import reverse
+from nautobot.core.models.generics import PrimaryModel
+from nautobot.extras.utils import extras_features
+
 from .choices import TunnelStatusChoices, TunnelTypeChoices
 
 
-class Tunnel(models.Model):
+@extras_features(
+    "custom_fields",
+    "custom_validators",
+    "export_templates",
+    "relationships",
+    "graphql",
+    "webhooks",
+)
+class Tunnel(PrimaryModel):
     """Tunnel model."""
 
-    tunnel_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=200, blank=True)
     status = models.CharField(
         max_length=30, choices=TunnelStatusChoices, default=TunnelStatusChoices.STATUS_PENDING_CONFIGURATION
     )
-    tunnel_type = models.CharField(max_length=30, choices=TunnelTypeChoices, default=TunnelTypeChoices.IPSEC_TUNNEL)
+    tunnel_type = models.CharField(max_length=30, choices=TunnelTypeChoices, default=TunnelTypeChoices.PPTP_TUNNEL)
     src_device = models.ForeignKey(to="dcim.Device", on_delete=models.CASCADE, help_text="Source Device", blank=False)
     src_address = models.CharField(verbose_name="Source Address", max_length=28, blank=True)
     dst_address = models.CharField(verbose_name="Destination Address", max_length=28, blank=True)
@@ -41,7 +52,7 @@ class Tunnel(models.Model):
     class Meta:
         """Class to define what will be used to set order based on. Will be using the unique tunnel ID for this purpose."""
 
-        ordering = ["tunnel_id"]
+        ordering = ["name"]
 
     def __str__(self):
         """Class to define what identifies the Tunnel object. Will be using name for this."""
