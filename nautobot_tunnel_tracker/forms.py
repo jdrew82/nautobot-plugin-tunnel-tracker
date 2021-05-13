@@ -3,8 +3,7 @@
 from django import forms
 from django.forms.models import ModelChoiceField
 
-from nautobot.utilities.forms import forms as utilities_forms
-from nautobot.utilities.forms.fields import DynamicModelMultipleChoiceField
+from nautobot.utilities.forms import forms as util_form
 from nautobot.dcim.models import Device
 from nautobot.extras.forms import CustomFieldModelCSVForm
 
@@ -14,7 +13,7 @@ from .choices import TunnelStatusChoices, TunnelTypeChoices
 BLANK_CHOICE = (("", "---------"),)
 
 
-class TunnelCreationForm(utilities_forms.BootstrapMixin, forms.ModelForm):
+class TunnelCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
     """Form for creating a new tunnel."""
 
     name = forms.CharField(required=True, label="Name", help_text="Name of tunnel")
@@ -43,7 +42,7 @@ class TunnelCreationForm(utilities_forms.BootstrapMixin, forms.ModelForm):
         ]
 
 
-class TunnelFilterForm(utilities_forms.BootstrapMixin, forms.ModelForm):
+class TunnelFilterForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
     """Form for filtering Tunnel instances."""
 
     device = forms.ModelChoiceField(queryset=Device.objects.all(), required=False)
