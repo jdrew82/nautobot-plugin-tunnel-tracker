@@ -12,29 +12,37 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('extras', '0004_populate_default_status_records'),
-        ('dcim', '0004_initial_part_4'),
+        ("extras", "0004_populate_default_status_records"),
+        ("dcim", "0004_initial_part_4"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Tunnel',
+            name="Tunnel",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('created', models.DateField(auto_now_add=True, null=True)),
-                ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('_custom_field_data', models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder)),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('description', models.CharField(blank=True, max_length=200)),
-                ('status', models.CharField(default='pending-configuration', max_length=30)),
-                ('tunnel_type', models.CharField(default='pptp-tunnel', max_length=30)),
-                ('tunnel_mtu', models.IntegerField(default=1500)),
-                ('clns_mtu', models.IntegerField(default=1500)),
-                ('src_device', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='dcim.device')),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("created", models.DateField(auto_now_add=True, null=True)),
+                ("last_updated", models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "_custom_field_data",
+                    models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("description", models.CharField(blank=True, max_length=200)),
+                ("status", models.CharField(default="pending-configuration", max_length=30)),
+                ("tunnel_type", models.CharField(default="pptp-tunnel", max_length=30)),
+                ("tunnel_mtu", models.IntegerField(default=1500)),
+                ("clns_mtu", models.IntegerField(default=1500)),
+                ("src_device", models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to="dcim.device")),
+                ("tags", taggit.managers.TaggableManager(through="extras.TaggedItem", to="extras.Tag")),
             ],
             options={
-                'ordering': ['name'],
+                "ordering": ["name"],
             },
         ),
     ]
