@@ -43,7 +43,7 @@ class TunnelFilter(CreatedUpdatedFilterSet):
         model = Tunnel
         fields = ["name", "status", "tunnel_type"]
 
-    def search(self, queryset, name, value):
+    def search(self, queryset, value):  # pylint: disable=no-self-use
         """Perform the filtered search."""
         if not value.strip():
             return queryset
