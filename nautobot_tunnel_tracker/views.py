@@ -15,7 +15,7 @@ class TunnelListView(generic.ObjectListView):
     filterset = TunnelFilter
     filterset_form = TunnelFilterForm
     table = TunnelTable
-    action_buttons = ("add", "export")
+    template_name = "nautobot_tunnel_tracker/tunnel_list.html"
 
 
 class TunnelView(generic.ObjectView):

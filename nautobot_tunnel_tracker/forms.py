@@ -1,6 +1,7 @@
 """Django forms declaration for nautobot_tunnel_tracker plugin."""
 
 from django import forms
+from django.forms.models import ModelChoiceField
 
 from nautobot.utilities.forms import forms as utilities_forms
 from nautobot.utilities.forms.fields import DynamicModelMultipleChoiceField
@@ -20,18 +21,13 @@ class TunnelCreationForm(utilities_forms.BootstrapMixin, forms.ModelForm):
 
     status = forms.ChoiceField(choices=BLANK_CHOICE + TunnelStatusChoices.CHOICES, required=False)
 
-    tunnel_type = forms.ChoiceField(
-        choices=TunnelTypeChoices.CHOICES,
-        required=True,
-        label="Tunnel type",
-        help_text="Tunnel type. This must be specified.",
-    )
+    tunnel_type = forms.ChoiceField(choices=TunnelTypeChoices.CHOICES, required=True, label="Tunnel Type")
 
-    src_device = DynamicModelMultipleChoiceField(
+    src_device = ModelChoiceField(
         queryset=Device.objects.all(), required=True, label="Source device", help_text="Source device for tunnel"
     )
-    src_address = forms.CharField(required=True, label="Source IP address", help_text="IP address of the source device")
-    dst_address = forms.CharField(required=True, label="Peer IP address", help_text="IP address of the peer device")
+    tunnel_mtu = forms.IntegerField(label="Tunnel MTU", help_text="MTU for tunnel")
+    clns_mtu = forms.IntegerField(label="Connectionless-mode Network Service MTU", help_text="MTU for CLNS traffic")
 
     class Meta:
         """Class to define what is used to create a new network tunnel."""
@@ -42,8 +38,8 @@ class TunnelCreationForm(utilities_forms.BootstrapMixin, forms.ModelForm):
             "status",
             "tunnel_type",
             "src_device",
-            "src_address",
-            "dst_address",
+            "tunnel_mtu",
+            "clns_mtu",
         ]
 
 
@@ -60,8 +56,6 @@ class TunnelFilterForm(utilities_forms.BootstrapMixin, forms.ModelForm):
         model = Tunnel
         fields = [
             "src_device",
-            "src_address",
-            "dst_address",
             "tunnel_type",
         ]
 
