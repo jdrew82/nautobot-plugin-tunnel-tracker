@@ -47,8 +47,8 @@ class Tunnel(PrimaryModel):
             self.status,
             self.tunnel_type,
             self.src_device,
-            self.src_address,
-            self.dst_address,
+            self.tunnel_mtu,
+            self.clns_mtu,
         )
 
     class Meta:
@@ -60,6 +60,6 @@ class Tunnel(PrimaryModel):
         """Class to define what identifies the Tunnel object. Will be using name for this."""
         return self.name
 
-    def get_absolute_url(self):
+    def get_absolute_url(self):  # pylint: disable=no-self-use
         """Absolute url for the Tunnel instance."""
         return reverse("plugins:nautobot_tunnel_tracker:tunnels_list")
