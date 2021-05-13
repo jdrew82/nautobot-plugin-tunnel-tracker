@@ -81,7 +81,10 @@ def docker_compose(context, command, **kwargs):
         command (str): Command string to append to the "docker-compose ..." command, such as "build", "up", etc.
         **kwargs: Passed through to the context.run() call.
     """
-    build_env = {"NAUTOBOT_VER": context.nautobot_tunnel_tracker.nautobot_ver, "PYTHON_VER": context.nautobot_tunnel_tracker.python_ver}
+    build_env = {
+        "NAUTOBOT_VER": context.nautobot_tunnel_tracker.nautobot_ver,
+        "PYTHON_VER": context.nautobot_tunnel_tracker.python_ver,
+    }
     compose_command = f'docker-compose --project-name {context.nautobot_tunnel_tracker.project_name} --project-directory "{context.nautobot_tunnel_tracker.compose_dir}"'
     for compose_file in context.nautobot_tunnel_tracker.compose_files:
         compose_file_path = os.path.join(context.nautobot_tunnel_tracker.compose_dir, compose_file)
@@ -96,7 +99,7 @@ def run_command(context, command, **kwargs):
     if is_truthy(context.nautobot_tunnel_tracker.local):
         context.run(command, **kwargs)
     else:
-        # Check if netbox is running, no need to start another netbox container to run a command
+        # Check if Nautobot is running, no need to start another Nautobot container to run a command
         docker_compose_status = "ps --services --filter status=running"
         results = docker_compose(context, docker_compose_status, hide="out")
         if "nautobot" in results.stdout:
@@ -250,6 +253,24 @@ def post_upgrade(context):
     command = "nautobot-server post_upgrade"
 
     run_command(context, command)
+
+
+@task
+def db_import(context):
+    """Import test data.
+
+    Args:
+        context (obj): Used to run specific commands
+    """
+    import time
+
+    command = "up -d postgres"
+    docker_compose(context, command)
+    time.sleep(2)
+
+    command = "exec postgres sh -c 'psql -h localhost -U nautobot < /tmp/nautobot_backup.dump'"
+    docker_compose(context, command, pty=True)
+    stop(context)
 
 
 # ------------------------------------------------------------------------------
