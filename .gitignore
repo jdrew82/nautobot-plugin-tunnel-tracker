@@ -300,3 +300,6 @@ creds.env
 
 # Invoke overrides
 invoke.yml
+
+# ignore backup dump
+nautobot_backup.dump
