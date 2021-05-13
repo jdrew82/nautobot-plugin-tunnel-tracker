@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nautobot-tunnel-tracker"
-version = "0.2.0"
+version = "0.3.0"
 description = "A plugin for tracking tunnels in Nautobot"
 authors = ["Justin Drew <jdrew82@users.noreply.github.com>"]
 
