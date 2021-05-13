@@ -3,15 +3,15 @@
 from django.urls import path
 
 from .views import (
-    ListTunnelView,
-    CreateTunnelView,
-    BulkDeleteTunnelView,
-    BulkImportTunnelView,
+    TunnelListView,
+    TunnelEditView,
+    TunnelBulkDeleteView,
+    TunnelBulkImportView,
 )
 
 urlpatterns = [
-    path("", ListTunnelView.as_view(), name="tunnels_list"),
-    path("add/", CreateTunnelView.as_view(), name="tunnel_creation"),
-    path("delete/", BulkDeleteTunnelView.as_view(), name="tunnels_bulk_delete"),
-    path("import/", BulkImportTunnelView.as_view(), name="tunnels_import"),
+    path("", TunnelListView.as_view(), name="tunnels_list"),
+    path("add/", TunnelEditView.as_view(), name="tunnel_creation"),
+    path("delete/", TunnelBulkDeleteView.as_view(), name="tunnels_bulk_delete"),
+    path("import/", TunnelBulkImportView.as_view(), name="tunnels_import"),
 ]
