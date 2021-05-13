@@ -25,17 +25,19 @@ class Tunnel(PrimaryModel):
         max_length=30, choices=TunnelStatusChoices, default=TunnelStatusChoices.STATUS_PENDING_CONFIGURATION
     )
     tunnel_type = models.CharField(max_length=30, choices=TunnelTypeChoices, default=TunnelTypeChoices.PPTP_TUNNEL)
-    src_device = models.ForeignKey(to="dcim.Device", on_delete=models.CASCADE, help_text="Source Device", blank=False)
-    src_address = models.CharField(verbose_name="Source Address", max_length=28, blank=True)
-    dst_address = models.CharField(verbose_name="Destination Address", max_length=28, blank=True)
+    src_device = models.OneToOneField(
+        to="dcim.Device", on_delete=models.CASCADE, help_text="Source Device", blank=False
+    )
+    tunnel_mtu = models.IntegerField(help_text="MTU for tunnel", default=1500)
+    clns_mtu = models.IntegerField(help_text="Connectionless-mode Network Service MTU", default=1500)
 
     csv_headers = [
         "name",
         "status",
         "tunnel_type",
         "src_device",
-        "src_address",
-        "dst_address",
+        "tunnel_mtu",
+        "clns_mtu",
     ]
 
     def to_csv(self):

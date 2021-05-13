@@ -9,39 +9,25 @@ class TunnelTable(BaseTable):
     """Table for displaying configured Tunnel instances."""
 
     pk = ToggleColumn()
+    name = tables.LinkColumn()
+    status = tables.LinkColumn()
+    tunnel_type = tables.LinkColumn()
+    src_device = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
         """Class to define what is used for tunnl_lists.html template to show configured tunnels."""
 
         model = Tunnel
-        fields = [
-            "pk",
-            "name",
-            "status",
-            "tunnel_type",
-            "src_device",
-            "dst_device",
-            "src_address",
-            "dst_address",
-        ]
+        fields = ["pk", "name", "status", "tunnel_type", "src_device", "tunnel_mtu", "clns_mtu"]
 
 
 class TunnelBulkTable(BaseTable):
     """Table for displaying Tunnel imports."""
 
-    pk = tables.LinkColumn()
+    name = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
         """Class to define what is used for bulk import of tunnels."""
 
         model = Tunnel
-        fields = (
-            "pk",
-            "name",
-            "status",
-            "tunnel_type",
-            "src_device",
-            "dst_device",
-            "src_address",
-            "dst_address",
-        )
+        fields = ("id", "name", "status", "tunnel_type", "src_device", "tunnel_mtu", "clns_mtu")
