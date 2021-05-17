@@ -14,7 +14,7 @@ menu_items = (
             PluginMenuButton(
                 link="plugins:nautobot_tunnel_tracker:tunnel_creation",
                 title="Add a new tunnel",
-                icon_class="fa fa-plus",
+                icon_class="mdi mdi-plus-thick",
                 color=ButtonColorChoices.GREEN,
                 permissions=["nautobot_tunnel_tracker.add_tunnels"],
             ),
@@ -22,7 +22,7 @@ menu_items = (
             PluginMenuButton(
                 link="plugins:nautobot_tunnel_tracker:tunnels_import",
                 title="Bulk import tunnels",
-                icon_class="fa fa-download",
+                icon_class="mdi mdi-database-import-outline",
                 color=ButtonColorChoices.BLUE,
                 permissions=["nautobot_tunnel_tracker.add_tunnels"],
             ),
