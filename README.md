@@ -2,7 +2,10 @@
 
 A plugin for [Nautobot](https://github.com/nautobot/nautobot).
 
+!!!! PLEASE NOTE THIS IS STILL WIP AND IS NOT READY FOR PRODUCTION. IT MAY BE BROKEN AT ANY TIME. !!!!
 ## Installation
+
+TODO - Push to PyPi. This will be done when v1.0.0 is completed.
 
 The plugin is available as a Python package in pypi and can be installed with pip
 
