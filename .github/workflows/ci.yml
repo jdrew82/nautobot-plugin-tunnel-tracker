@@ -1,0 +1,39 @@
+name: Run linters and unittests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1.1.7
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-ansi --no-root
+      - name: Install library
+        run: poetry install --no-interaction --no-ansi
+      - name: Linting
+        env:
+          INVOKE_LOCAL: true
+        run: |
+          poetry run invoke black
+          poetry run invoke flake8
+          poetry run invoke pylint
+          poetry run invoke yamllint
+          poetry run invoke pydocstyle
+          poetry run invoke bandit
+      - name: Unittests
+        env:
+          INVOKE_LOCAL: true
+        run: |
+          poetry run invoke pytest
+      - run: echo "This job's status is ${{ job.status }}."
