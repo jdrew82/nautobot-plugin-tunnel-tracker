@@ -24,7 +24,7 @@ class Tunnel(PrimaryModel):
     status = models.CharField(
         max_length=30, choices=TunnelStatusChoices, default=TunnelStatusChoices.STATUS_PENDING_CONFIGURATION
     )
-    tunnel_type = models.CharField(max_length=30, choices=TunnelTypeChoices, default=TunnelTypeChoices.PPTP_TUNNEL)
+    tunnel_type = models.CharField(max_length=30, choices=TunnelTypeChoices, default=TunnelTypeChoices.GRE_TUNNEL)
     src_device = models.OneToOneField(
         to="dcim.Device", on_delete=models.CASCADE, help_text="Source Device", blank=False
     )
