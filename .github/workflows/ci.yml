@@ -22,7 +22,9 @@ jobs:
       - name: Install library
         run: poetry install --no-interaction --no-ansi
       - name: Prepare environment
-        run: cp development/creds.example.env development/creds.env
+        run: |
+          poetry run invoke build
+          cp development/creds.example.env development/creds.env
       - name: Linting
         env:
           INVOKE_LOCAL: true
