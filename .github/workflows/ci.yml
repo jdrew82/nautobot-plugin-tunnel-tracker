@@ -25,19 +25,9 @@ jobs:
         run: |
           cp development/creds.example.env development/creds.env
           poetry run invoke build
-      - name: Linting
+      - name: Running linters and unittests
         env:
           INVOKE_LOCAL: true
         run: |
-          poetry run invoke black
-          poetry run invoke flake8
-          poetry run invoke pylint
-          poetry run invoke yamllint
-          poetry run invoke pydocstyle
-          poetry run invoke bandit
-      - name: Unittests
-        env:
-          INVOKE_LOCAL: true
-        run: |
-          poetry run invoke pytest
+          poetry run invoke tests
       - run: echo "This job's status is ${{ job.status }}."
