@@ -39,12 +39,12 @@ jobs:
         with:
           files: ./dist/*
 
-  push_to_registry:
-    name: Push Package to PyPI
-    runs-on: ubuntu-latest
-    steps:
-      - name: Push to PyPI
-        uses: pypa/gh-action/pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+  # push_to_registry:
+  #   name: Push Package to PyPI
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Push to PyPI
+  #       uses: pypa/gh-action/pypi-publish@release/v1
+  #       with:
+  #         user: __token__
+  #         password: ${{ secrets.PYPI_API_TOKEN }}
