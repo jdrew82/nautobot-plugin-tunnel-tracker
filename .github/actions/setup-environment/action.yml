@@ -1,0 +1,33 @@
+---
+name: "Setup the environment"
+description: "This action setup the Poetry environment and load virtual environment from a cache if the cache exists."
+runs:
+  # Using the composite action type
+  using: "composite"
+  steps:
+    - name: "Set up Python"
+      uses: "actions/setup-python@v2"
+      with:
+        python-version: "3.9"
+    - name: "Log: Install Poetry"
+      run: "echo Installing Poetry"
+      shell: "bash"
+    - name: "Install Poetry"
+      run: "pip install poetry"
+      shell: "bash"
+    - name: "Log: Check cache"
+      run: "echo Check if the cache exists"
+      shell: "bash"
+    - name: "Cache"
+      uses: "actions/cache@v2"
+      id: "cached-poetry"
+      with:
+        path: "~/.cache/pypoetry/virtualenvs/"
+        # The same environment is loaded until the "poetry.lock" is changed
+        key: "{{ runner.os }}-poetry-${{ hashFiles('./poetry.lock') }}"
+    - name: "Log: The cache status"
+      run: "if [ '${{ steps.cached-poetry.outputs.cache-hit }}' != 'true' ]; then echo 'The cache not found, installing environment using Poetry'; else echo 'The cache found, environment loaded.'; fi"
+      shell: "bash"
+    - name: "Install environment"
+      shell: "bash"
+      run: "if [ '${{ steps.cached-poetry.outputs.cache-hit }}' != 'true' ]; then poetry install; fi"

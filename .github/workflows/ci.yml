@@ -1,33 +1,125 @@
-name: Run linters and unittests
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+---
+name: "CI"
+on:
+  - "push"
+  - "pull_request"
 
+jobs:
+  black:
+    runs-on: "ubuntu-20.04"
+    env:
+      INVOKE_NAUTOBOT_LOCAL: "True"
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install and configure Poetry
-        uses: snok/install-poetry@v1.1.7
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-ansi --no-root
-      - name: Install library
-        run: poetry install --no-interaction --no-ansi
-      - name: Prepare environment
-        run: |
-          cp development/creds.example.env development/creds.env
-          poetry run invoke build
-      - name: Running linters and unittests
-        env:
-          INVOKE_LOCAL: true
-        run: |
-          poetry run invoke tests
-      - run: echo "This job's status is ${{ job.status }}."
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Linting: black"
+        run: "poetry run invoke black"
+  bandit:
+    runs-on: "ubuntu-20.04"
+    env:
+      INVOKE_NAUTOBOT_TUNNEL_TRACKer_LOCAL: "True"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Linting: bandit"
+        run: "poetry run invoke bandit"
+    needs:
+      - "black"
+  pydocstyle:
+    runs-on: "ubuntu-20.04"
+    env:
+      INVOKE_NAUTOBOT_TUNNEL_TRACKer_LOCAL: "True"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Linting: pydocstyle"
+        run: "poetry run invoke pydocstyle"
+    needs:
+      - "black"
+  flake8:
+    runs-on: "ubuntu-20.04"
+    env:
+      INVOKE_NAUTOBOT_TUNNEL_TRACKer_LOCAL: "True"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Linting: flake8"
+        run: "poetry run invoke flake8"
+    needs:
+      - "black"
+  yamllint:
+    runs-on: "ubuntu-20.04"
+    env:
+      INVOKE_NAUTOBOT_TUNNEL_TRACKer_LOCAL: "True"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Linting: yamllint"
+        run: "poetry run invoke yamllint"
+    needs:
+      - "black"
+  build:
+    runs-on: "ubuntu-20.04"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Copy credentials"
+        run: "cp development/creds.example.env development/creds.env"
+      - name: "Build a container"
+        run: "poetry run invoke build"
+    needs:
+      - "bandit"
+      - "pydocstyle"
+      - "flake8"
+      - "yamllint"
+  pylint:
+    runs-on: "ubuntu-20.04"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Copy credentials"
+        run: "cp development/creds.example.env development/creds.env"
+      - name: "Build a container"
+        run: "poetry run invoke build"
+      - name: "Linting: Pylint"
+        run: "poetry run invoke pylint"
+    needs:
+      - "build"
+  unittest:
+    strategy:
+      fail-fast: true
+      # If unittests need to run with any other variable put
+      # the variable as a list under the `matrix`
+      matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
+    runs-on: "ubuntu-20.04"
+    env:
+      INVOKE_NAUTOBOT_CHATOPS_PYTHON_VER: "${{ matrix.python-version }}"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v2"
+      - name: "Setup environment"
+        uses: "./.github/actions/setup-environment"
+      - name: "Copy credentials"
+        run: "cp development/creds.example.env development/creds.env"
+      - name: "Build a container"
+        run: "poetry run invoke build"
+      - name: "Run Tests"
+        run: "poetry run invoke unittest"
+    needs:
+      - "pylint"
+  
