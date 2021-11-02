@@ -70,7 +70,7 @@ The [PyInvoke](http://www.pyinvoke.org/) library is used to provide some helper 
 * `compose_dir`: the full path to a directory containing the project compose files
 * `compose_files`: a list of compose files applied in order (see [Multiple Compose files](https://docs.docker.com/compose/extends/#multiple-compose-files) for more information)
 
-Using PyInvoke these configuration options can be overridden using [several methods](http://docs.pyinvoke.org/en/stable/concepts/configuration.html).  Perhaps the simplest is simply setting an environment variable `INVOKE_NAUTOBOT-TUNNEL-TRACKER_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override.  The only exception is `compose_files`, because it is a list it must be overridden in a yaml file.  There is an example `invoke.yml` in this directory which can be used as a starting point.
+Using PyInvoke these configuration options can be overridden using [several methods](http://docs.pyinvoke.org/en/stable/concepts/configuration.html).  Perhaps the simplest is simply setting an environment variable `INVOKE_NAUTOBOT_TUNNEL_TRACKER_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override.  The only exception is `compose_files`, because it is a list it must be overridden in a yaml file.  There is an example `invoke.yml` in this directory which can be used as a starting point.
 
 #### Local Poetry Development Environment
 
@@ -124,7 +124,7 @@ Nautobot server can now be accessed at [http://localhost:8080](http://localhost:
 
 The project is coming with a CLI helper based on [invoke](http://www.pyinvoke.org/) to help setup the development environment. The commands are listed below in 3 categories `dev environment`, `utility` and `testing`. 
 
-Each command can be executed with `invoke <command>`. Environment variables `INVOKE_NAUTOBOT-TUNNEL-TRACKER_PYTHON_VER` and `INVOKE_NAUTOBOT-TUNNEL-TRACKER_NAUTOBOT_VER` may be specified to override the default versions. Each command also has its own help `invoke <command> --help`
+Each command can be executed with `invoke <command>`. Environment variables `INVOKE_NAUTOBOT_TUNNEL_TRACKER_PYTHON_VER` and `INVOKE_NAUTOBOT_TUNNEL_TRACKER_NAUTOBOT_VER` may be specified to override the default versions. Each command also has its own help `invoke <command> --help`
 
 #### Docker dev environment
 
