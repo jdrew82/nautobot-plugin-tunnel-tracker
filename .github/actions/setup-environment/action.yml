@@ -31,3 +31,6 @@ runs:
     - name: "Install environment"
       shell: "bash"
       run: "if [ '${{ steps.cached-poetry.outputs.cache-hit }}' != 'true' ]; then poetry install; fi"
+    - name: "Create creds.env file"
+      run: "cp development/creds.example.env development/creds.env"
+      shell: "bash"
