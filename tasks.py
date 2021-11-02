@@ -33,7 +33,7 @@ def is_truthy(arg):
 
 
 # Use pyinvoke configuration for default values, see http://docs.pyinvoke.org/en/stable/concepts/configuration.html
-# Variables may be overwritten in invoke.yml or by the environment variables INVOKE_TUNNEL-TRACKER_xxx
+# Variables may be overwritten in invoke.yml or by the environment variables INVOKE_TUNNEL_TRACKER_xxx
 namespace = Collection("nautobot_tunnel_tracker")
 namespace.configure(
     {
