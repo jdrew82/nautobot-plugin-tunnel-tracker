@@ -38,7 +38,7 @@ namespace = Collection("nautobot_tunnel_tracker")
 namespace.configure(
     {
         "nautobot_tunnel_tracker": {
-            "nautobot_ver": "develop-latest",
+            "nautobot_ver": "1.2.4",
             "project_name": "nautobot_tunnel_tracker",
             "python_ver": "3.6",
             "local": False,
