@@ -1,6 +1,6 @@
 """Plugin declaration for nautobot_tunnel_tracker."""
 
-__version__ = "0.3.0"
+__version__ = "1.0.0"
 
 from nautobot.extras.plugins import PluginConfig
 
