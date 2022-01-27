@@ -1,7 +1,7 @@
 ---
 nautobot_tunnel_tracker:
   project_name: "nautobot_tunnel_tracker"
-  nautobot_ver: "develop-latest"
+  nautobot_ver: "1.2.4"
   local: false
   python_ver: "3.6"
   compose_dir: "development"
