@@ -35,6 +35,7 @@ flake8 = "*"
 coverage = "*"
 mkdocs = "*"
 markdown-include = "*"
+python-semantic-release = "^7.24.0"
 
 [tool.black]
 line-length = 120
@@ -99,3 +100,17 @@ testpaths = [
     "tests"
 ]
 addopts = "-vv --doctest-modules"
+
+[tool.semantic_release]
+version_variable = [
+    "nautobot_tunnel_tracker/__init__.py:__version__"
+]
+version_toml = [
+    "pyproject.toml:tool.poetry.version"
+]
+major_on_zero = true
+branch = "main"
+upload_to_PyPI = false
+upload_to_release = false
+changelog_file = "CHANGELOG.md"
+build_command = "poetry build"
