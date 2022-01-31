@@ -40,7 +40,7 @@ namespace.configure(
         "nautobot_tunnel_tracker": {
             "nautobot_ver": "1.2.4",
             "project_name": "nautobot_tunnel_tracker",
-            "python_ver": "3.6",
+            "python_ver": "3.8",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
             "compose_files": [
