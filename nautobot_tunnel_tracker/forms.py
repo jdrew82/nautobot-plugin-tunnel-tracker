@@ -5,9 +5,9 @@ from django.forms.models import ModelChoiceField
 
 from nautobot.utilities.forms import forms as util_form
 from nautobot.dcim.models import Device
-from nautobot.extras.forms import CustomFieldModelCSVForm
+from nautobot.extras.forms import CustomFieldModelCSVForm, DynamicModelChoiceField
 
-from .models import Tunnel
+from .models import BaseTunnel
 from .choices import TunnelStatusChoices, TunnelTypeChoices
 
 BLANK_CHOICE = (("", "---------"),)
@@ -16,29 +16,27 @@ BLANK_CHOICE = (("", "---------"),)
 class TunnelCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
     """Form for creating a new tunnel."""
 
-    name = forms.CharField(required=True, label="Name", help_text="Name of tunnel")
-
     status = forms.ChoiceField(choices=BLANK_CHOICE + TunnelStatusChoices.CHOICES, required=False)
 
     tunnel_type = forms.ChoiceField(choices=TunnelTypeChoices.CHOICES, required=True, label="Tunnel Type")
 
-    src_device = ModelChoiceField(
-        queryset=Device.objects.all(), required=True, label="Source device", help_text="Source device for tunnel"
+    src_device = ModelChoiceField(queryset=Device.objects.all(), required=True, label="Source Device")
+    src_interface = DynamicModelChoiceField(
+        queryset=Interface.objects.all(),
+        query_params={"device_id": "$src_device"},
+        required=True,
+        label="Source Interface",
     )
-    tunnel_mtu = forms.IntegerField(label="Tunnel MTU", help_text="MTU for tunnel")
-    clns_mtu = forms.IntegerField(label="Connectionless-mode Network Service MTU", help_text="MTU for CLNS traffic")
 
     class Meta:
         """Class to define what is used to create a new network tunnel."""
 
-        model = Tunnel
+        model = BaseTunnel
         fields = [
-            "name",
             "status",
             "tunnel_type",
             "src_device",
-            "tunnel_mtu",
-            "clns_mtu",
+            "src_interface",
         ]
 
 
@@ -46,16 +44,18 @@ class TunnelFilterForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: di
     """Form for filtering Tunnel instances."""
 
     device = forms.ModelChoiceField(queryset=Device.objects.all(), required=False)
+    tunnel_type = forms.ChoiceField(choices=TunnelTypeChoices.CHOICES, required=False)
     status = forms.ChoiceField(choices=BLANK_CHOICE + TunnelStatusChoices.CHOICES, required=False)
     q = forms.CharField(required=False, label="Search")
 
     class Meta:
         """Class to define what is used for filtering tunnels with the search box."""
 
-        model = Tunnel
+        model = BaseTunnel
         fields = [
-            "src_device",
+            "device",
             "tunnel_type",
+            "status",
         ]
 
 
@@ -65,5 +65,6 @@ class TunnelCreationCSVForm(CustomFieldModelCSVForm):
     class Meta:
         """Class to define what is used for bulk import of tunnels form using CSV."""
 
-        model = Tunnel
-        fields = Tunnel.csv_headers
+        model = BaseTunnel
+        fields = BaseTunnel.csv_headers
+

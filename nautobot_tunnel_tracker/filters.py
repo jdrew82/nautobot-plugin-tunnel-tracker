@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from nautobot.extras.filters import CreatedUpdatedFilterSet
 
-from .models import Tunnel
+from .models import BaseTunnel, IKEPolicy
 
 
 class TunnelFilter(CreatedUpdatedFilterSet):
@@ -17,30 +17,30 @@ class TunnelFilter(CreatedUpdatedFilterSet):
     )
 
     name = django_filters.ModelMultipleChoiceFilter(
-        field_name="name__slug",
-        queryset=Tunnel.objects.all(),
+        field_name="name",
+        queryset=BaseTunnel.objects.all(),
         to_field_name="slug",
-        label="Tunnel Name (slug)",
+        label="Tunnel Name",
     )
 
     status = django_filters.ModelMultipleChoiceFilter(
-        field_name="status__slug",
-        queryset=Tunnel.objects.all(),
+        field_name="status",
+        queryset=BaseTunnel.objects.all(),
         to_field_name="slug",
-        label="Tunnel Status (slug)",
+        label="Tunnel Status",
     )
 
     tunnel_type = django_filters.ModelMultipleChoiceFilter(
-        field_name="tunnel_type__slug",
-        queryset=Tunnel.objects.all(),
+        field_name="tunnel_type",
+        queryset=BaseTunnel.objects.all(),
         to_field_name="slug",
-        label="Tunnel Type (slug)",
+        label="Tunnel Type",
     )
 
     class Meta:
         """Class to define what is used for filtering tunnels with the search box."""
 
-        model = Tunnel
+        model = BaseTunnel
         fields = ["name", "status", "tunnel_type"]
 
     def search(self, queryset, value):  # pylint: disable=no-self-use

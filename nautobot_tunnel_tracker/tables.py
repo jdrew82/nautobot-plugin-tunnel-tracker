@@ -2,7 +2,7 @@
 
 import django_tables2 as tables
 from nautobot.utilities.tables import BaseTable, ToggleColumn
-from .models import Tunnel
+from .models import BaseTunnel
 
 
 class TunnelTable(BaseTable):
@@ -15,10 +15,10 @@ class TunnelTable(BaseTable):
     src_device = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
-        """Class to define what is used for tunnl_lists.html template to show configured tunnels."""
+        """Class to define what is used for tunnel_lists.html template to show configured tunnels."""
 
-        model = Tunnel
-        fields = ["pk", "name", "status", "tunnel_type", "src_device", "tunnel_mtu", "clns_mtu"]
+        model = BaseTunnel
+        fields = ["pk", "name", "status", "tunnel_type", "src_device"]
 
 
 class TunnelBulkTable(BaseTable):
@@ -29,5 +29,6 @@ class TunnelBulkTable(BaseTable):
     class Meta(BaseTable.Meta):
         """Class to define what is used for bulk import of tunnels."""
 
-        model = Tunnel
-        fields = ("id", "name", "status", "tunnel_type", "src_device", "tunnel_mtu", "clns_mtu")
+        model = BaseTunnel
+        fields = ("id", "name", "status", "tunnel_type", "src_device")
+

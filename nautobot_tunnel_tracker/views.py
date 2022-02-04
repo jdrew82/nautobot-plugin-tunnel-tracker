@@ -2,16 +2,15 @@
 
 from nautobot.core.views import generic
 
-from .filters import TunnelFilter
-from .forms import TunnelCreationForm, TunnelFilterForm, TunnelCreationCSVForm
-from .models import Tunnel
+from .forms import TunnelCreationForm, TunnelFilterForm, TunnelCreationCSVForm)
+from .models import BaseTunnel
 from .tables import TunnelTable, TunnelBulkTable
 
 
 class TunnelListView(generic.ObjectListView):
     """View for listing all Tunnels."""
 
-    queryset = Tunnel.objects.all()
+    queryset = BaseTunnel.objects.all()
     filterset = TunnelFilter
     filterset_form = TunnelFilterForm
     table = TunnelTable
@@ -21,7 +20,7 @@ class TunnelListView(generic.ObjectListView):
 class TunnelView(generic.ObjectView):
     """View for single Tunnel instance."""
 
-    queryset = Tunnel.objects.all()
+    queryset = BaseTunnel.objects.all()
 
     def get_extra_context(self, request, instance):
         """Add extra data to detail view for Nautobot."""
@@ -31,7 +30,7 @@ class TunnelView(generic.ObjectView):
 class TunnelBulkImportView(generic.BulkImportView):
     """View for bulk-importing a CSV file to create Tunnels."""
 
-    queryset = Tunnel.objects.all()
+    queryset = BaseTunnel.objects.all()
     model_form = TunnelCreationCSVForm
     table = TunnelBulkTable
 
@@ -39,18 +38,18 @@ class TunnelBulkImportView(generic.BulkImportView):
 class TunnelEditView(generic.ObjectEditView):
     """View for managing Tunnels."""
 
-    queryset = Tunnel.objects.all()
+    queryset = BaseTunnel.objects.all()
     model_form = TunnelCreationForm
 
 
 class TunnelDeleteView(generic.ObjectDeleteView):
     """View for deleting Tunnels."""
 
-    queryset = Tunnel.objects.all()
+    queryset = BaseTunnel.objects.all()
 
 
 class TunnelBulkDeleteView(generic.BulkDeleteView):
     """View for deleting one or more Tunnels."""
 
-    queryset = Tunnel.objects.filter()
+    queryset = BaseTunnel.objects.filter()
     table = TunnelTable
