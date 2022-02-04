@@ -2,7 +2,15 @@
 
 from nautobot.core.views import generic
 
-from .forms import TunnelCreationForm, TunnelFilterForm, TunnelCreationCSVForm)
+from .filters import TunnelFilter, IKEPolicyFilter
+from .forms import (
+    TunnelCreationForm,
+    TunnelFilterForm,
+    TunnelCreationCSVForm,
+    IKEPolicyCreationForm,
+    IKEPolicyFilterForm,
+    IKEPolicyCreationCSVForm,
+)
 from .models import BaseTunnel
 from .tables import TunnelTable, TunnelBulkTable
 
@@ -53,3 +61,51 @@ class TunnelBulkDeleteView(generic.BulkDeleteView):
 
     queryset = BaseTunnel.objects.filter()
     table = TunnelTable
+
+
+class IKEPolicyListView(generic.ObjectListView):
+    """View for listing all IKE Policies."""
+
+    queryset = IKEPolicy.objects.all()
+    filterset = IKEPolicyFilter
+    filterset_form = IKEPolicyFilterForm
+    table = IKEPolicyTable
+    template_name = "nautobot_tunnel_tracker/ikepolicy_list.html"
+
+
+class IKEPolicyView(generic.ObjectView):
+    """View for single IKE Policy instance."""
+
+    queryset = IKEPolicy.objects.all()
+
+    def get_extra_context(self, request, instance):
+        """Add extra data to detail view for Nautobot."""
+        return {}
+
+
+class IKEPolicyBulkImportView(generic.BulkImportView):
+    """View for bulk-importing a CSV file to create IKE Policies."""
+
+    queryset = IKEPolicy.objects.all()
+    model_form = IKEPolicyCreationCSVForm
+    table = IKEPolicyBulkTable
+
+
+class IKEPolicyEditView(generic.ObjectEditView):
+    """View for managing IKE Policies."""
+
+    queryset = IKEPolicy.objects.all()
+    model_form = IKEPolicyCreationForm
+
+
+class IKEPolicyDeleteView(generic.ObjectDeleteView):
+    """View for deleting IKE Policies."""
+
+    queryset = IKEPolicy.objects.all()
+
+
+class IKEPolicyBulkDeleteView(generic.BulkDeleteView):
+    """View for deleting one or more IKE Policies."""
+
+    queryset = IKEPolicy.objects.filter()
+    table = IKEPolicyTable

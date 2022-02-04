@@ -2,7 +2,7 @@
 
 import django_tables2 as tables
 from nautobot.utilities.tables import BaseTable, ToggleColumn
-from .models import BaseTunnel
+from .models import BaseTunnel, IKEPolicy
 
 
 class TunnelTable(BaseTable):
@@ -32,3 +32,33 @@ class TunnelBulkTable(BaseTable):
         model = BaseTunnel
         fields = ("id", "name", "status", "tunnel_type", "src_device")
 
+
+class IKEPolicyTable(BaseTable):
+    """Table for displaying configured IKE Policy instances."""
+
+    pk = ToggleColumn()
+    name = tables.LinkColumn()
+    version = tables.LinkColumn()
+    authentication = tables.LinkColumn()
+    hash = tables.LinkColumn()
+
+    class Meta(BaseTable.Meta):
+        """Class to define what is used for ikepolicy_lists.html template to show configured IKE policies."""
+
+        model = IKEPolicy
+        fields = ["pk", "name", "version", "authentication", "hash"]
+
+
+class IKEPolicyBulkTable(BaseTable):
+    """Table for displaying IKE Policy imports."""
+
+    name = tables.LinkColumn()
+    version = tables.LinkColumn()
+    authentication = tables.LinkColumn()
+    hash = tables.LinkColumn()
+
+    class Meta(BaseTable.Meta):
+        """Class to define what is used for bulk import of IKE Policies."""
+
+        model = IKEPolicy
+        fields = ("id", "name", "version", "authentication", "hash")

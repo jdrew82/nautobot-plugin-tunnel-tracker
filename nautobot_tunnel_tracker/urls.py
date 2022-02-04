@@ -3,6 +3,10 @@
 from django.urls import path
 
 from .views import (
+    IKEPolicyBulkDeleteView,
+    IKEPolicyBulkImportView,
+    IKEPolicyEditView,
+    IKEPolicyListView,
     TunnelListView,
     TunnelEditView,
     TunnelBulkDeleteView,
@@ -14,8 +18,8 @@ urlpatterns = [
     path("tunnels/add/", TunnelEditView.as_view(), name="tunnel_creation"),
     path("tunnels/delete/", TunnelBulkDeleteView.as_view(), name="tunnels_bulk_delete"),
     path("tunnels/import/", TunnelBulkImportView.as_view(), name="tunnels_import"),
-    path("", TunnelListView.as_view(), name="tunnels_list"),
-    path("add/", TunnelEditView.as_view(), name="tunnel_creation"),
-    path("delete/", TunnelBulkDeleteView.as_view(), name="tunnels_bulk_delete"),
-    path("import/", TunnelBulkImportView.as_view(), name="tunnels_import"),
+    path("policies", IKEPolicyListView.as_view(), name="ikepolicy_list"),
+    path("policies/add/", IKEPolicyEditView.as_view(), name="ikepolicy_creation"),
+    path("policies/delete/", IKEPolicyBulkDeleteView.as_view(), name="ikepolicy_bulk_delete"),
+    path("/policies/import/", IKEPolicyBulkImportView.as_view(), name="ikepolicy_import"),
 ]

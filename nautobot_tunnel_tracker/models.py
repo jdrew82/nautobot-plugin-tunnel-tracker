@@ -5,7 +5,15 @@ from django.shortcuts import reverse
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.utils import extras_features
 
-from .choices import TunnelStatusChoices, TunnelTypeChoices
+from .choices import (
+    AuthenticationChoices,
+    DHGroupChoices,
+    HashChoices,
+    IKEVersionChoices,
+    TunnelStatusChoices,
+    TunnelTypeChoices,
+    PPTPEncapsulationChoices,
+)
 
 
 @extras_features(
@@ -145,3 +153,47 @@ class PPTPTunnel(BaseTunnel):
         """Save method for PPTPTunnel class."""
         return super().save(*args, **kwargs)
 
+
+class IKEPolicy(PrimaryModel):
+    """IKE Policy model."""
+
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=200, blank=True)
+    version = models.CharField(max_length=100, choices=IKEVersionChoices, default=IKEVersionChoices.IKE1)
+    nat = models.BooleanField(verbose_name="NAT-T", default=False)
+    authentication = models.CharField(
+        max_length=100, choices=AuthenticationChoices, default=AuthenticationChoices.PRE_SHARED_KEY
+    )
+    hash = models.CharField(max_length=100, choices=HashChoices, default=HashChoices.HMAC_MD5)
+    dh_group = models.CharField(max_length=100, choices=DHGroupChoices, default=DHGroupChoices.GROUP1)
+    pfs = models.BooleanField(verbose_name="Perfect Forward Secrecy", default=False)
+
+    csv_headers = ["name", "description", "version", "nat", "authentication", "hash", "dh_group"]
+
+    def to_csv(self):
+        """Indicates model fields to return as csv."""
+        return (
+            self.name,
+            self.description,
+            self.version,
+            self.nat,
+            self.authentication,
+            self.hash,
+            self.dh_group,
+        )
+
+    def __str__(self):
+        """Class to define what identifies the IKE Policy object."""
+        return self.name
+
+    def get_absolute_url(self):  # pylint: disable=no-self-use
+        """Absolute url for the IKE Policy instance."""
+        return reverse("plugins:nautobot_tunnel_tracker:ikepolicy_list")
+
+    def clean(self):
+        """Clean method for IKEPolicy class."""
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        """Save method for IKEPolicy class."""
+        return super().save(*args, **kwargs)
