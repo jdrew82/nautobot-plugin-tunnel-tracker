@@ -343,7 +343,7 @@ def yamllint(context):
 @task
 def check_migrations(context):
     """Check for missing migrations."""
-    command = "nautobot-server --config=nautobot/core/tests/nautobot_config.py makemigrations --dry-run --check"
+    command = "nautobot-server --config=/opt/nautobot/nautobot_config.py makemigrations --dry-run --check"
 
     run_command(context, command)
 
