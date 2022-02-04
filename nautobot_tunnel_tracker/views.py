@@ -11,8 +11,8 @@ from .forms import (
     IKEPolicyFilterForm,
     IKEPolicyCreationCSVForm,
 )
-from .models import BaseTunnel
-from .tables import TunnelTable, TunnelBulkTable
+from .models import BaseTunnel, IKEPolicy
+from .tables import TunnelTable, TunnelBulkTable, IKEPolicyTable, IKEPolicyBulkTable
 
 
 class TunnelListView(generic.ObjectListView):

@@ -106,6 +106,7 @@ class EncryptionChoices(ChoiceSet):
         (AES, "AES"),
     )
 
+
 class DHGroupChoices(ChoiceSet):
     """List of possible Diffie-Hellman groups."""
 
@@ -122,5 +123,5 @@ class DHGroupChoices(ChoiceSet):
         (GROUP5, "Group 3 (1536 bits)"),
         (GROUP14, "Group 14 (2048 bits)"),
         (GROUP19, "Group 19 (256 bits EC)"),
-        (GROUP20, "Group 20 (384 bits EC)")
+        (GROUP20, "Group 20 (384 bits EC)"),
     )

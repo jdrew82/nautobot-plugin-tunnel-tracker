@@ -78,10 +78,6 @@ class BaseTunnel(PrimaryModel):
         """Absolute url for the Tunnel instance."""
         return reverse("plugins:nautobot_tunnel_tracker:tunnels_list")
 
-    def clean(self):
-        """Clean method for BaseTunnel class."""
-        super().clean()
-
     def save(self, *args, **kwargs):
         """Save method for BaseTunnel class."""
         return super().save(*args, **kwargs)
@@ -145,14 +141,6 @@ class PPTPTunnel(BaseTunnel):
         """Absolute url for the PPTPTunnel instance."""
         return reverse("plugins:nautobot_tunnel_tracker:tunnels_list")
 
-    def clean(self):
-        """Clean method for PPTPTunnel class."""
-        super().clean()
-
-    def save(self, *args, **kwargs):
-        """Save method for PPTPTunnel class."""
-        return super().save(*args, **kwargs)
-
 
 class IKEPolicy(PrimaryModel):
     """IKE Policy model."""
@@ -189,11 +177,3 @@ class IKEPolicy(PrimaryModel):
     def get_absolute_url(self):  # pylint: disable=no-self-use
         """Absolute url for the IKE Policy instance."""
         return reverse("plugins:nautobot_tunnel_tracker:ikepolicy_list")
-
-    def clean(self):
-        """Clean method for IKEPolicy class."""
-        super().clean()
-
-    def save(self, *args, **kwargs):
-        """Save method for IKEPolicy class."""
-        return super().save(*args, **kwargs)
