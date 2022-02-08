@@ -11,14 +11,14 @@ from .forms import (
     IKEPolicyFilterForm,
     IKEPolicyCreationCSVForm,
 )
-from .models import BaseTunnel, IKEPolicy
+from .models import IKEPolicy, PPTPTunnel
 from .tables import TunnelTable, TunnelBulkTable, IKEPolicyTable, IKEPolicyBulkTable
 
 
 class TunnelListView(generic.ObjectListView):
     """View for listing all Tunnels."""
 
-    queryset = BaseTunnel.objects.all()
+    queryset = PPTPTunnel.objects.all()
     filterset = TunnelFilter
     filterset_form = TunnelFilterForm
     table = TunnelTable
@@ -28,7 +28,7 @@ class TunnelListView(generic.ObjectListView):
 class TunnelView(generic.ObjectView):
     """View for single Tunnel instance."""
 
-    queryset = BaseTunnel.objects.all()
+    queryset = PPTPTunnel.objects.all()
 
     def get_extra_context(self, request, instance):
         """Add extra data to detail view for Nautobot."""
@@ -38,7 +38,7 @@ class TunnelView(generic.ObjectView):
 class TunnelBulkImportView(generic.BulkImportView):
     """View for bulk-importing a CSV file to create Tunnels."""
 
-    queryset = BaseTunnel.objects.all()
+    queryset = PPTPTunnel.objects.all()
     model_form = TunnelCreationCSVForm
     table = TunnelBulkTable
 
@@ -46,20 +46,20 @@ class TunnelBulkImportView(generic.BulkImportView):
 class TunnelEditView(generic.ObjectEditView):
     """View for managing Tunnels."""
 
-    queryset = BaseTunnel.objects.all()
+    queryset = PPTPTunnel.objects.all()
     model_form = TunnelCreationForm
 
 
 class TunnelDeleteView(generic.ObjectDeleteView):
     """View for deleting Tunnels."""
 
-    queryset = BaseTunnel.objects.all()
+    queryset = PPTPTunnel.objects.all()
 
 
 class TunnelBulkDeleteView(generic.BulkDeleteView):
     """View for deleting one or more Tunnels."""
 
-    queryset = BaseTunnel.objects.filter()
+    queryset = PPTPTunnel.objects.filter()
     table = TunnelTable
 
 
