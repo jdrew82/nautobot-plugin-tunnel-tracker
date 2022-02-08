@@ -44,7 +44,7 @@ menu_items = (
             # Links to the plugins view to bulk import tunnels if user has the "add_tunnels" permission.
             PluginMenuButton(
                 link="plugins:nautobot_tunnel_tracker:ikepolicy_import",
-                title="Bulk import IKE Policy",
+                title="Bulk import IKE Policies",
                 icon_class="mdi mdi-database-import-outline",
                 color=ButtonColorChoices.BLUE,
                 permissions=["nautobot_tunnel_tracker.add_ikepolicy"],
