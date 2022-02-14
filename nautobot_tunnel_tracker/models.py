@@ -1,6 +1,7 @@
 """Django models declaration for nautobot_tunnel_tracker plugin."""
 
 from django.db import models
+from django.forms import ValidationError
 from django.shortcuts import reverse
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.utils import extras_features
@@ -105,6 +106,13 @@ class PPTPTunnel(BaseTunnel):
         """Absolute url for the PPTPTunnel instance."""
         return reverse("plugins:nautobot_tunnel_tracker:tunnels_list")
 
+    def clean(self):
+        """Perform validation of model fields."""
+        if 0 > self.tunnel_mtu > 9000:
+            raise ValidationError(message="Tunnel MTU must be between 0 and 9000.")
+        if 0 > self.clns_mtu > 9000:
+            raise ValidationError(message="CLNS MTU must be between 0 and 9000.")
+
 
 class ISAKMPPolicy(PrimaryModel):
     """ISAKMP Policy model."""
@@ -148,3 +156,9 @@ class ISAKMPPolicy(PrimaryModel):
         """Absolute url for the ISAKMP Policy instance."""
         return reverse("plugins:nautobot_tunnel_tracker:isakmp_policy_list")
 
+    def clean(self):
+        """Perform validation of model fields."""
+        if 0 > self.lifetime > 2147483647:
+            raise ValidationError("Lifetime must be greater than 0 and less than 2147483647.")
+        if 10 > self.nat_keepalive > 3600:
+            raise ValidationError(message="NAT Keepalive must be between 10 and 3600.")
