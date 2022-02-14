@@ -59,23 +59,39 @@ class BaseTunnel(PrimaryModel):
 class PPTPTunnel(BaseTunnel):
     """PPTP type Tunnel model."""
 
-    dst_device = models.OneToOneField(
-        to="dcim.Device", on_delete=models.CASCADE, help_text="Destination Device", blank=False
+    dst_device = models.ForeignKey(
+        to="dcim.Device",
+        on_delete=models.CASCADE,
+        help_text="Destination Device",
+        blank=False,
+        related_name="pptptunnels",
     )
-    dst_interface = models.OneToOneField(
+    dst_interface = models.ForeignKey(
         to="dcim.Interface",
         on_delete=models.CASCADE,
         help_text="Destination Interface",
         blank=False,
-        limit_choices_to=models.Q(app_label="dcim", model="interface", device_name=dst_device),
+        related_name="pptptunnels",
     )
     tunnel_mtu = models.IntegerField(help_text="MTU for Tunnel", default=1500)
     clns_mtu = models.IntegerField(help_text="Connectionless-mode Network Service MTU", default=1500)
     encapsulation = models.CharField(
-        max_length=30, choices=PPTPEncapsulationChoices, default=PPTPEncapsulationChoices.GRE_ENCAP
+        max_length=30, choices=PPTPEncapsulationChoices.CHOICES, default=PPTPEncapsulationChoices.GRE_ENCAP
     )
 
-    csv_headers = ["name", "description", "status", "tunnel_type", "src_device", ""]
+    csv_headers = [
+        "name",
+        "description",
+        "status",
+        "tunnel_type",
+        "src_device",
+        "src_interface",
+        "dst_device",
+        "dst_interface",
+        "tunnel_mtu",
+        "clns_mtu",
+        "encapsulation",
+    ]
 
     def to_csv(self):
         """Indicates model fields to return as csv."""
@@ -119,6 +135,7 @@ class ISAKMPPolicy(PrimaryModel):
 
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=200, blank=True)
+    version = models.CharField(max_length=100, choices=IKEVersionChoices.CHOICES, default=IKEVersionChoices.IKE1)
     mode = models.CharField(max_length=100, choices=ISAKMPModeChoices.CHOICES, default=ISAKMPModeChoices.MAIN)
     identification = models.CharField(
         max_length=100,
@@ -126,15 +143,35 @@ class ISAKMPPolicy(PrimaryModel):
         default=ISAKMPIdentificationMethodChoices.ADDRESS,
     )
     nat = models.BooleanField(verbose_name="NAT Translation", default=False)
+    nat_keepalive = models.IntegerField(verbose_name="NAT Keepalive", default=3600)
     authentication = models.CharField(
         max_length=100, choices=ISAKMPAuthenticationChoices.CHOICES, default=ISAKMPAuthenticationChoices.PRE_SHARED_KEY
     )
     hash = models.CharField(max_length=100, choices=ISAKMPHashChoices.CHOICES, default=ISAKMPHashChoices.HMAC_MD5)
-    hash = models.CharField(max_length=100, choices=HashChoices, default=HashChoices.HMAC_MD5)
-    dh_group = models.CharField(max_length=100, choices=DHGroupChoices, default=DHGroupChoices.GROUP1)
+    dh_group = models.CharField(max_length=100, choices=DHGroupChoices.CHOICES, default=DHGroupChoices.GROUP1)
     pfs = models.BooleanField(verbose_name="Perfect Forward Secrecy", default=False)
+    lifetime = models.IntegerField(verbose_name="SA Lifetime", default=86400)
+    secrets_group = models.ForeignKey(
+        to="extras.SecretsGroup",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text="Secrets Group to use for authentication. Should contain a Generic Secret or Key pointing to the relevant Secret.",
+    )
 
-    csv_headers = ["name", "description", "version", "nat", "authentication", "hash", "dh_group"]
+    csv_headers = [
+        "name",
+        "description",
+        "version",
+        "identification",
+        "nat",
+        "nat_keepalive",
+        "authentication",
+        "hash",
+        "dh_group",
+        "pfs",
+        "lifetime",
+    ]
 
     def to_csv(self):
         """Indicates model fields to return as csv."""
@@ -142,10 +179,14 @@ class ISAKMPPolicy(PrimaryModel):
             self.name,
             self.description,
             self.version,
+            self.identification,
             self.nat,
+            self.nat_keepalive,
             self.authentication,
             self.hash,
             self.dh_group,
+            self.pfs,
+            self.lifetime,
         )
 
     def __str__(self):
@@ -154,7 +195,7 @@ class ISAKMPPolicy(PrimaryModel):
 
     def get_absolute_url(self):  # pylint: disable=no-self-use
         """Absolute url for the ISAKMP Policy instance."""
-        return reverse("plugins:nautobot_tunnel_tracker:isakmp_policy_list")
+        return reverse("plugins:nautobot_tunnel_tracker:isakmppolicy_list")
 
     def clean(self):
         """Perform validation of model fields."""
