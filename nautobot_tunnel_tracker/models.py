@@ -6,10 +6,12 @@ from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.utils import extras_features
 
 from .choices import (
-    AuthenticationChoices,
+    ISAKMPAuthenticationChoices,
     DHGroupChoices,
-    HashChoices,
+    ISAKMPHashChoices,
     IKEVersionChoices,
+    ISAKMPIdentificationMethodChoices,
+    ISAKMPModeChoices,
     TunnelStatusChoices,
     TunnelTypeChoices,
     PPTPEncapsulationChoices,
@@ -142,16 +144,22 @@ class PPTPTunnel(BaseTunnel):
         return reverse("plugins:nautobot_tunnel_tracker:tunnels_list")
 
 
-class IKEPolicy(PrimaryModel):
-    """IKE Policy model."""
+class ISAKMPPolicy(PrimaryModel):
+    """ISAKMP Policy model."""
 
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=200, blank=True)
-    version = models.CharField(max_length=100, choices=IKEVersionChoices, default=IKEVersionChoices.IKE1)
-    nat = models.BooleanField(verbose_name="NAT-T", default=False)
-    authentication = models.CharField(
-        max_length=100, choices=AuthenticationChoices, default=AuthenticationChoices.PRE_SHARED_KEY
+    mode = models.CharField(max_length=100, choices=ISAKMPModeChoices.CHOICES, default=ISAKMPModeChoices.MAIN)
+    identification = models.CharField(
+        max_length=100,
+        choices=ISAKMPIdentificationMethodChoices.CHOICES,
+        default=ISAKMPIdentificationMethodChoices.ADDRESS,
     )
+    nat = models.BooleanField(verbose_name="NAT Translation", default=False)
+    authentication = models.CharField(
+        max_length=100, choices=ISAKMPAuthenticationChoices.CHOICES, default=ISAKMPAuthenticationChoices.PRE_SHARED_KEY
+    )
+    hash = models.CharField(max_length=100, choices=ISAKMPHashChoices.CHOICES, default=ISAKMPHashChoices.HMAC_MD5)
     hash = models.CharField(max_length=100, choices=HashChoices, default=HashChoices.HMAC_MD5)
     dh_group = models.CharField(max_length=100, choices=DHGroupChoices, default=DHGroupChoices.GROUP1)
     pfs = models.BooleanField(verbose_name="Perfect Forward Secrecy", default=False)
@@ -171,9 +179,10 @@ class IKEPolicy(PrimaryModel):
         )
 
     def __str__(self):
-        """Class to define what identifies the IKE Policy object."""
+        """Class to define what identifies the ISAKMP Policy object."""
         return self.name
 
     def get_absolute_url(self):  # pylint: disable=no-self-use
-        """Absolute url for the IKE Policy instance."""
-        return reverse("plugins:nautobot_tunnel_tracker:ikepolicy_list")
+        """Absolute url for the ISAKMP Policy instance."""
+        return reverse("plugins:nautobot_tunnel_tracker:isakmp_policy_list")
+

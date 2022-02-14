@@ -2,7 +2,7 @@
 
 import django_tables2 as tables
 from nautobot.utilities.tables import BaseTable, ToggleColumn
-from .models import BaseTunnel, IKEPolicy
+from .models import BaseTunnel, ISAKMPPolicy
 
 
 class TunnelTable(BaseTable):
@@ -33,8 +33,8 @@ class TunnelBulkTable(BaseTable):
         fields = ("id", "name", "status", "tunnel_type", "src_device")
 
 
-class IKEPolicyTable(BaseTable):
-    """Table for displaying configured IKE Policy instances."""
+class ISAKMPPolicyTable(BaseTable):
+    """Table for displaying configured ISAKMP Policy instances."""
 
     pk = ToggleColumn()
     name = tables.LinkColumn()
@@ -43,14 +43,14 @@ class IKEPolicyTable(BaseTable):
     hash = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
-        """Class to define what is used for ikepolicy_lists.html template to show configured IKE policies."""
+        """Class to define what is used for isakmp_policy_lists.html template to show configured ISAKMP policies."""
 
-        model = IKEPolicy
-        fields = ["pk", "name", "version", "authentication", "hash"]
+        model = ISAKMPPolicy
+        fields = ["pk", "name", "version", "mode", "authentication", "hash"]
 
 
-class IKEPolicyBulkTable(BaseTable):
-    """Table for displaying IKE Policy imports."""
+class ISAKMPPolicyBulkTable(BaseTable):
+    """Table for displaying ISAKMP Policy imports."""
 
     name = tables.LinkColumn()
     version = tables.LinkColumn()
@@ -58,7 +58,7 @@ class IKEPolicyBulkTable(BaseTable):
     hash = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
-        """Class to define what is used for bulk import of IKE Policies."""
+        """Class to define what is used for bulk import of ISAKMP Policies."""
 
-        model = IKEPolicy
+        model = ISAKMPPolicy
         fields = ("id", "name", "version", "authentication", "hash")

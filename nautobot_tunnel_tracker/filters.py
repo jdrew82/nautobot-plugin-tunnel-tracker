@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from nautobot.extras.filters import CreatedUpdatedFilterSet
 
-from .models import BaseTunnel, IKEPolicy
+from .models import BaseTunnel, ISAKMPPolicy
 
 
 class TunnelFilter(CreatedUpdatedFilterSet):
@@ -51,7 +51,7 @@ class TunnelFilter(CreatedUpdatedFilterSet):
         return queryset.filter(qs_filter)
 
 
-class IKEPolicyFilter(CreatedUpdatedFilterSet):
+class ISAKMPPolicyFilter(CreatedUpdatedFilterSet):
     """Filter capabilities for IKE Policy instances."""
 
     q = django_filters.CharFilter(
@@ -61,57 +61,57 @@ class IKEPolicyFilter(CreatedUpdatedFilterSet):
 
     name = django_filters.ModelMultipleChoiceFilter(
         field_name="name",
-        queryset=IKEPolicy.objects.all(),
-        to_field_name="slug",
-        label="IKE Policy Name",
+        queryset=ISAKMPPolicy.objects.all(),
+        to_field_name="name",
+        label="ISAKMP Policy Name",
     )
 
     version = django_filters.ModelMultipleChoiceFilter(
         field_name="version",
-        queryset=IKEPolicy.objects.all(),
-        to_field_name="slug",
-        label="IKE Policy Version",
+        queryset=ISAKMPPolicy.objects.all(),
+        to_field_name="version",
+        label="IKE Version",
     )
 
     nat = django_filters.ModelMultipleChoiceFilter(
         field_name="nat",
-        queryset=IKEPolicy.objects.all(),
-        to_field_name="slug",
-        label="IKE Policy NAT Translation",
+        queryset=ISAKMPPolicy.objects.all(),
+        to_field_name="nat",
+        label="ISAKMP Policy NAT Translation",
     )
 
     authentication = django_filters.ModelMultipleChoiceFilter(
         field_name="authentication",
-        queryset=IKEPolicy.objects.all(),
-        to_field_name="slug",
-        label="IKE Policy Authentication",
+        queryset=ISAKMPPolicy.objects.all(),
+        to_field_name="authentication",
+        label="ISAKMP Policy Authentication",
     )
 
     hash = django_filters.ModelMultipleChoiceFilter(
         field_name="hash",
-        queryset=IKEPolicy.objects.all(),
-        to_field_name="slug",
-        label="IKE Policy Hash",
+        queryset=ISAKMPPolicy.objects.all(),
+        to_field_name="hash",
+        label="ISAKMP Policy Hash",
     )
 
     dh_group = django_filters.ModelMultipleChoiceFilter(
         field_name="dh_group",
-        queryset=IKEPolicy.objects.all(),
-        to_field_name="slug",
-        label="IKE Policy DH Group",
+        queryset=ISAKMPPolicy.objects.all(),
+        to_field_name="dh_group",
+        label="ISAKMP Policy DH Group",
     )
 
     pfs = django_filters.ModelMultipleChoiceFilter(
         field_name="pfs",
-        queryset=IKEPolicy.objects.all(),
-        to_field_name="slug",
-        label="IKE Policy PFS",
+        queryset=ISAKMPPolicy.objects.all(),
+        to_field_name="pfs",
+        label="ISAKMP Policy PFS",
     )
 
     class Meta:
-        """Class to define what is used for filtering IKE policies with the search box."""
+        """Class to define what is used for filtering ISAKMP policies with the search box."""
 
-        model = IKEPolicy
+        model = ISAKMPPolicy
         fields = ["name", "version", "nat", "authentication", "hash", "dh_group", "pfs"]
 
     def search(self, queryset, value):  # pylint: disable=no-self-use

@@ -8,11 +8,12 @@ from nautobot.dcim.models import Device, Interface
 from nautobot.extras.forms import CustomFieldModelCSVForm, DynamicModelChoiceField
 from nautobot.extras.models import SecretsGroup
 
-from .models import BaseTunnel, IKEPolicy
+from .models import BaseTunnel, ISAKMPPolicy
 from .choices import (
-    AuthenticationChoices,
+    ISAKMPModeChoices,
+    ISAKMPAuthenticationChoices,
     DHGroupChoices,
-    HashChoices,
+    ISAKMPHashChoices,
     IKEVersionChoices,
     TunnelStatusChoices,
     TunnelTypeChoices,
@@ -77,8 +78,8 @@ class TunnelCreationCSVForm(CustomFieldModelCSVForm):
         fields = BaseTunnel.csv_headers
 
 
-class IKEPolicyCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
-    """Form for creating a new IKE policy."""
+class ISAKMPPolicyCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
+    """Form for creating a new ISAKMP policy."""
 
     name = forms.CharField(max_length=100, required=True)
     description = forms.CharField(max_length=100, required=False)
@@ -91,9 +92,9 @@ class IKEPolicyCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylin
     pfs = forms.BooleanField(label="Perfect Forward Secrecy", required=False)
 
     class Meta:
-        """Class to define what is used to create a new IKE policy."""
+        """Class to define what is used to create a new ISAKMP policy."""
 
-        model = IKEPolicy
+        model = ISAKMPPolicy
         fields = [
             "name",
             "description",
@@ -106,20 +107,20 @@ class IKEPolicyCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylin
         ]
 
 
-class IKEPolicyFilterForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
-    """Form for filtering IKE policy instances."""
+class ISAKMPPolicyFilterForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
+    """Form for filtering ISAKMP policy instances."""
 
     version = forms.ChoiceField(choices=BLANK_CHOICE + IKEVersionChoices.CHOICES, required=False)
-    authentication = forms.ChoiceField(choices=BLANK_CHOICE + AuthenticationChoices.CHOICES, required=False)
-    hash = forms.ChoiceField(choices=BLANK_CHOICE + HashChoices.CHOICES, required=False)
+    authentication = forms.ChoiceField(choices=BLANK_CHOICE + ISAKMPAuthenticationChoices.CHOICES, required=False)
+    hash = forms.ChoiceField(choices=BLANK_CHOICE + ISAKMPHashChoices.CHOICES, required=False)
     dh_group = forms.ChoiceField(choices=BLANK_CHOICE + DHGroupChoices.CHOICES, required=False)
     pfs = forms.BooleanField(label="Perfect Forward Secrecy", required=False)
     q = forms.CharField(required=False, label="Search")
 
     class Meta:
-        """Class to define what is used for filtering IKE policies with the search box."""
+        """Class to define what is used for filtering ISAKMP policies with the search box."""
 
-        model = IKEPolicy
+        model = ISAKMPPolicy
         fields = [
             "version",
             "authentication",
@@ -129,11 +130,11 @@ class IKEPolicyFilterForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint:
         ]
 
 
-class IKEPolicyCreationCSVForm(CustomFieldModelCSVForm):
-    """Form for entering CSV to bulk-import IKE policy entries."""
+class ISAKMPPolicyCreationCSVForm(CustomFieldModelCSVForm):
+    """Form for entering CSV to bulk-import ISAKMP policy entries."""
 
     class Meta:
-        """Class to define what is used for bulk import of IKE policies form using CSV."""
+        """Class to define what is used for bulk import of ISAKMP policies form using CSV."""
 
-        model = IKEPolicy
-        fields = IKEPolicy.csv_headers
+        model = ISAKMPPolicy
+        fields = ISAKMPPolicy.csv_headers

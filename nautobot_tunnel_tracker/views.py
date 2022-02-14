@@ -2,17 +2,17 @@
 
 from nautobot.core.views import generic
 
-from .filters import TunnelFilter, IKEPolicyFilter
+from .filters import TunnelFilter, ISAKMPPolicyFilter
 from .forms import (
     TunnelCreationForm,
     TunnelFilterForm,
     TunnelCreationCSVForm,
-    IKEPolicyCreationForm,
-    IKEPolicyFilterForm,
-    IKEPolicyCreationCSVForm,
+    ISAKMPPolicyCreationForm,
+    ISAKMPPolicyFilterForm,
+    ISAKMPPolicyCreationCSVForm,
 )
-from .models import IKEPolicy, PPTPTunnel
-from .tables import TunnelTable, TunnelBulkTable, IKEPolicyTable, IKEPolicyBulkTable
+from .models import ISAKMPPolicy, PPTPTunnel
+from .tables import TunnelTable, TunnelBulkTable, ISAKMPPolicyTable, ISAKMPPolicyBulkTable
 
 
 class TunnelListView(generic.ObjectListView):
@@ -63,49 +63,49 @@ class TunnelBulkDeleteView(generic.BulkDeleteView):
     table = TunnelTable
 
 
-class IKEPolicyListView(generic.ObjectListView):
-    """View for listing all IKE Policies."""
+class ISAKMPPolicyListView(generic.ObjectListView):
+    """View for listing all ISAKMP Policies."""
 
-    queryset = IKEPolicy.objects.all()
-    filterset = IKEPolicyFilter
-    filterset_form = IKEPolicyFilterForm
-    table = IKEPolicyTable
-    template_name = "nautobot_tunnel_tracker/ikepolicy_list.html"
+    queryset = ISAKMPPolicy.objects.all()
+    filterset = ISAKMPPolicyFilter
+    filterset_form = ISAKMPPolicyFilterForm
+    table = ISAKMPPolicyTable
+    template_name = "nautobot_tunnel_tracker/isakmp_policy_list.html"
 
 
-class IKEPolicyView(generic.ObjectView):
-    """View for single IKE Policy instance."""
+class ISAKMPPolicyView(generic.ObjectView):
+    """View for single ISAKMP Policy instance."""
 
-    queryset = IKEPolicy.objects.all()
+    queryset = ISAKMPPolicy.objects.all()
 
     def get_extra_context(self, request, instance):
         """Add extra data to detail view for Nautobot."""
         return {}
 
 
-class IKEPolicyBulkImportView(generic.BulkImportView):
-    """View for bulk-importing a CSV file to create IKE Policies."""
+class ISAKMPPolicyBulkImportView(generic.BulkImportView):
+    """View for bulk-importing a CSV file to create ISAKMP Policies."""
 
-    queryset = IKEPolicy.objects.all()
-    model_form = IKEPolicyCreationCSVForm
-    table = IKEPolicyBulkTable
-
-
-class IKEPolicyEditView(generic.ObjectEditView):
-    """View for managing IKE Policies."""
-
-    queryset = IKEPolicy.objects.all()
-    model_form = IKEPolicyCreationForm
+    queryset = ISAKMPPolicy.objects.all()
+    model_form = ISAKMPPolicyCreationCSVForm
+    table = ISAKMPPolicyBulkTable
 
 
-class IKEPolicyDeleteView(generic.ObjectDeleteView):
-    """View for deleting IKE Policies."""
+class ISAKMPPolicyEditView(generic.ObjectEditView):
+    """View for managing ISAKMP Policies."""
 
-    queryset = IKEPolicy.objects.all()
+    queryset = ISAKMPPolicy.objects.all()
+    model_form = ISAKMPPolicyCreationForm
 
 
-class IKEPolicyBulkDeleteView(generic.BulkDeleteView):
-    """View for deleting one or more IKE Policies."""
+class ISAKMPPolicyDeleteView(generic.ObjectDeleteView):
+    """View for deleting ISAKMP Policies."""
 
-    queryset = IKEPolicy.objects.filter()
-    table = IKEPolicyTable
+    queryset = ISAKMPPolicy.objects.all()
+
+
+class ISAKMPPolicyBulkDeleteView(generic.BulkDeleteView):
+    """View for deleting one or more ISAKMP Policies."""
+
+    queryset = ISAKMPPolicy.objects.filter()
+    table = ISAKMPPolicyTable

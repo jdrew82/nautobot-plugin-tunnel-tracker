@@ -29,25 +29,25 @@ menu_items = (
         ),
     ),
     PluginMenuItem(
-        link="plugins:nautobot_tunnel_tracker:ikepolicy_list",
-        link_text="IKE Policies",
-        permissions=["nautobot_tunnel_tracker.view_ikepolicy"],
+        link="plugins:nautobot_tunnel_tracker:isakmppolicy_list",
+        link_text="ISAKMP Policies",
+        permissions=["nautobot_tunnel_tracker.view_isakmp_policies"],
         buttons=(
             # Link to the plugins view to add a tunnel if user has "add_tunnels" permission.
             PluginMenuButton(
-                link="plugins:nautobot_tunnel_tracker:ikepolicy_creation",
-                title="Add a new IKE Policy",
+                link="plugins:nautobot_tunnel_tracker:isakmppolicy_creation",
+                title="Add a new ISAKMP Policy",
                 icon_class="mdi mdi-plus-thick",
                 color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_tunnel_tracker.add_ikepolicy"],
+                permissions=["nautobot_tunnel_tracker.add_isakmppolicy"],
             ),
             # Links to the plugins view to bulk import tunnels if user has the "add_tunnels" permission.
             PluginMenuButton(
-                link="plugins:nautobot_tunnel_tracker:ikepolicy_import",
-                title="Bulk import IKE Policies",
+                link="plugins:nautobot_tunnel_tracker:isakmppolicy_import",
+                title="Bulk import ISAKMP Policies",
                 icon_class="mdi mdi-database-import-outline",
                 color=ButtonColorChoices.BLUE,
-                permissions=["nautobot_tunnel_tracker.add_ikepolicy"],
+                permissions=["nautobot_tunnel_tracker.add_isakmppolicy"],
             ),
         ),
     ),
