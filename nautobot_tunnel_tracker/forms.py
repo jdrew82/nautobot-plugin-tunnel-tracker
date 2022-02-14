@@ -1,14 +1,12 @@
 """Django forms declaration for nautobot_tunnel_tracker plugin."""
 
 from django import forms
-from django.forms.models import ModelChoiceField
-
 from nautobot.utilities.forms import forms as util_form
 from nautobot.dcim.models import Device, Interface
 from nautobot.extras.forms import CustomFieldModelCSVForm, DynamicModelChoiceField
 from nautobot.extras.models import SecretsGroup
 
-from .models import BaseTunnel, ISAKMPPolicy
+from .models import PPTPTunnel, ISAKMPPolicy
 from .choices import (
     ISAKMPModeChoices,
     ISAKMPAuthenticationChoices,
@@ -40,7 +38,7 @@ class TunnelCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: 
     class Meta:
         """Class to define what is used to create a new network tunnel."""
 
-        model = BaseTunnel
+        model = PPTPTunnel
         fields = [
             "status",
             "tunnel_type",
@@ -60,7 +58,7 @@ class TunnelFilterForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: di
     class Meta:
         """Class to define what is used for filtering tunnels with the search box."""
 
-        model = BaseTunnel
+        model = PPTPTunnel
         fields = [
             "device",
             "tunnel_type",
@@ -74,8 +72,8 @@ class TunnelCreationCSVForm(CustomFieldModelCSVForm):
     class Meta:
         """Class to define what is used for bulk import of tunnels form using CSV."""
 
-        model = BaseTunnel
-        fields = BaseTunnel.csv_headers
+        model = PPTPTunnel
+        fields = PPTPTunnel.csv_headers
 
 
 class ISAKMPPolicyCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member

@@ -2,23 +2,24 @@
 
 import django_tables2 as tables
 from nautobot.utilities.tables import BaseTable, ToggleColumn
-from .models import BaseTunnel, ISAKMPPolicy
+from .models import PPTPTunnel, ISAKMPPolicy
 
 
 class TunnelTable(BaseTable):
-    """Table for displaying configured Tunnel instances."""
+    """Table for displaying configured PPTPTunnel instances."""
 
     pk = ToggleColumn()
     name = tables.LinkColumn()
     status = tables.LinkColumn()
     tunnel_type = tables.LinkColumn()
     src_device = tables.LinkColumn()
+    dst_device = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
         """Class to define what is used for tunnel_lists.html template to show configured tunnels."""
 
-        model = BaseTunnel
-        fields = ["pk", "name", "status", "tunnel_type", "src_device"]
+        model = PPTPTunnel
+        fields = ["pk", "name", "status", "tunnel_type", "src_device", "dst_device"]
 
 
 class TunnelBulkTable(BaseTable):
@@ -29,7 +30,7 @@ class TunnelBulkTable(BaseTable):
     class Meta(BaseTable.Meta):
         """Class to define what is used for bulk import of tunnels."""
 
-        model = BaseTunnel
+        model = PPTPTunnel
         fields = ("id", "name", "status", "tunnel_type", "src_device")
 
 
@@ -39,6 +40,7 @@ class ISAKMPPolicyTable(BaseTable):
     pk = ToggleColumn()
     name = tables.LinkColumn()
     version = tables.LinkColumn()
+    mode = tables.LinkColumn()
     authentication = tables.LinkColumn()
     hash = tables.LinkColumn()
 
