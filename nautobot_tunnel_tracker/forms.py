@@ -23,27 +23,48 @@ BLANK_CHOICE = (("", "---------"),)
 class TunnelCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # pylint: disable=no-member
     """Form for creating a new tunnel."""
 
-    status = forms.ChoiceField(choices=BLANK_CHOICE + TunnelStatusChoices.CHOICES, required=False)
+    name = forms.CharField(max_length=100, required=True)
+    slug = forms.CharField(max_length=100, required=True)
+    description = forms.CharField(max_length=200, required=False)
+    status = forms.ChoiceField(choices=BLANK_CHOICE + TunnelStatusChoices.CHOICES, required=True)
 
     tunnel_type = forms.ChoiceField(choices=TunnelTypeChoices.CHOICES, required=True, label="Tunnel Type")
 
-    src_device = ModelChoiceField(queryset=Device.objects.all(), required=True, label="Source Device")
+    src_device = forms.ModelChoiceField(queryset=Device.objects.all(), required=True, label="Source Device")
     src_interface = DynamicModelChoiceField(
         queryset=Interface.objects.all(),
         query_params={"device_id": "$src_device"},
         required=True,
         label="Source Interface",
     )
+    dst_device = forms.ModelChoiceField(queryset=Device.objects.all(), required=True, label="Destination Device")
+    dst_interface = DynamicModelChoiceField(
+        queryset=Interface.objects.all(),
+        query_params={"device_id": "$dst_device"},
+        required=True,
+        label="Destination Interface",
+    )
+    tunnel_mtu = forms.IntegerField(label="Tunnel MTU", max_value=9000, required=True)
+    clns_mtu = forms.IntegerField(label="CLNS MTU", max_value=9000, required=True)
+    encapsulation = forms.CharField(max_length=100, required=True)
 
     class Meta:
         """Class to define what is used to create a new network tunnel."""
 
         model = PPTPTunnel
         fields = [
+            "name",
+            "slug",
+            "description",
             "status",
             "tunnel_type",
             "src_device",
             "src_interface",
+            "dst_device",
+            "dst_interface",
+            "tunnel_mtu",
+            "clns_mtu",
+            "encapsulation",
         ]
 
 
@@ -80,14 +101,17 @@ class ISAKMPPolicyCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # py
     """Form for creating a new ISAKMP policy."""
 
     name = forms.CharField(max_length=100, required=True)
-    description = forms.CharField(max_length=100, required=False)
+    description = forms.CharField(max_length=200, required=False)
     version = forms.ChoiceField(choices=IKEVersionChoices.CHOICES, required=True)
+    mode = forms.ChoiceField(label="Mode", choices=ISAKMPModeChoices.CHOICES, required=True)
     nat = forms.BooleanField(label="NAT Translation", required=False)
-    authentication = forms.ChoiceField(choices=AuthenticationChoices.CHOICES, required=True)
+    nat_keepalive = forms.IntegerField(label="NAT Keepalive", required=True)
+    authentication = forms.ChoiceField(choices=ISAKMPAuthenticationChoices.CHOICES, required=True)
     secrets_group = DynamicModelChoiceField(required=True, queryset=SecretsGroup.objects.all())
-    hash = forms.ChoiceField(choices=HashChoices.CHOICES, required=True)
+    hash = forms.ChoiceField(choices=ISAKMPHashChoices.CHOICES, required=True)
     dh_group = forms.ChoiceField(label="DH Group", choices=DHGroupChoices.CHOICES, required=True)
     pfs = forms.BooleanField(label="Perfect Forward Secrecy", required=False)
+    lifetime = forms.IntegerField(label="SA Lifetime", required=True)
 
     class Meta:
         """Class to define what is used to create a new ISAKMP policy."""
@@ -97,11 +121,15 @@ class ISAKMPPolicyCreationForm(util_form.BootstrapMixin, forms.ModelForm):  # py
             "name",
             "description",
             "version",
+            "mode",
             "nat",
+            "nat_keepalive",
             "authentication",
             "hash",
             "dh_group",
             "pfs",
+            "lifetime",
+            "secrets_group",
         ]
 
 
